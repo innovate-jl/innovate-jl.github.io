@@ -46,13 +46,13 @@ export function computeDifferenceFromHTML(files) {
 }
 
 function extractUsernamesFromHTML(html) {
-    const userList = [];
-    const usernameRegex = /https:\/\/www\.instagram\.com\/([^\/"'>]+)/g;
+    const usernameRegex = /https:\/\/www\.instagram\.com\/(?:_u\/)?([^\/"<'>]+)/g;
+    const userSet = new Set(); // Use a Set to automatically remove duplicates
     let match;
-    
+
     while ((match = usernameRegex.exec(html)) !== null) {
-        userList.push(match[1]);
+        userSet.add(match[1]); // Add each username to the Set
     }
 
-    return userList;
+    return Array.from(userSet); // Convert Set back to Array
 }
