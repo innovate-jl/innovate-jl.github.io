@@ -1,276 +1,83 @@
-<!DOCTYPE HTML>
-<!-- 
-Copyright (c) @2024 JNL Enterprises. All rights reserved.
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare your Instagram followers and following export privately in your browser.">
+  <title>Unifolllow — Private Instagram follow checker</title>
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2540056840638247" crossorigin="anonymous"></script>
+  <meta name="google-adsense-account" content="ca-pub-2540056840638247">
+</head>
+<body>
+  <a class="skip-link" href="#checker">Skip to the checker</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Unifolllow home"><span class="brand-mark" aria-hidden="true">u</span><span>Unifolllow</span></a>
+    <nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="blog.html">Guides</a><a href="user-stories.html">Stories</a><a href="faq.html">Help</a><a href="about.html">About</a></nav>
+  </header>
 
-This software is the confidential and proprietary information of
-JNL Enterprises ("Confidential Information"). You shall not
-disclose such Confidential Information and shall use it only in
-accordance with the terms of the license agreement you entered into
-with JNL Enterprises.
--->
-<html>
-	<head>
-		<title>Unifolllow</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-        <link rel="stylesheet" href="../assets/css/navbar.css" />
-		<link rel="icon" type="image/png" href="/favicon.png">
-		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2540056840638247"
-		crossorigin="anonymous"></script>
-		<meta name="google-adsense-account" content="ca-pub-2540056840638247">
-	</head>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">PRIVATE • FREE • NO LOGIN</p>
+        <h1 id="hero-title">See which accounts don’t follow you back.</h1>
+        <p class="lede">Upload your Instagram export and compare it right here. Your files stay in your browser and are never sent anywhere.</p>
+        <a class="button button-primary" href="#checker">Check my export <span aria-hidden="true">↓</span></a>
+        <p class="quiet-note"><span aria-hidden="true">⌁</span> No password, account connection, or upload required.</p>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="phone-card"><div class="phone-top"><span></span><span></span><span></span></div><div class="profile-row"><div class="avatar avatar-large"></div><div><b>@yourprofile</b><small>Following</small></div></div><div class="account-row"><div class="avatar coral"></div><div><b>cameron.w</b><small>Doesn’t follow back</small></div><i>×</i></div><div class="account-row"><div class="avatar purple"></div><div><b>jordancreates</b><small>Doesn’t follow back</small></div><i>×</i></div><div class="account-row faded"><div class="avatar blue"></div><div><b>sam.travels</b><small>Follows you</small></div><i>✓</i></div></div>
+        <div class="private-pill">⌁ Checked on your device</div>
+      </div>
+    </section>
 
-<!-- Google tag (gtag.js) -->
-			<script async src="https://www.googletagmanager.com/gtag/js?id=G-BK5N7HVC46"></script>
-			<script>
-				window.dataLayer = window.dataLayer || [];
-				function gtag(){dataLayer.push(arguments);}
-				gtag('js', new Date());
+    <!-- Optional manual AdSense placement: add an approved ad unit here only after it has an actual slot ID. Keep it away from the upload, compare, and download controls. -->
 
-				gtag('config', 'G-BK5N7HVC46');
-			</script>
-	
-	<body class="is-preload">
-        <!-- Navigation Bar -->
-        <div id="navbar-placeholder"></div>
-        <script src="assets/js/loadNavBar.js"></script>
+    <section class="checker-section" id="checker" aria-labelledby="checker-title">
+      <div class="section-heading"><p class="eyebrow">THE CHECKER</p><h2 id="checker-title">Add your Instagram export</h2><p>Select both follower files at once. HTML and JSON exports are supported.</p></div>
+      <div class="checker-card">
+        <div class="steps-indicator" aria-label="Three-step process"><div class="step current"><span>1</span><b>Add files</b></div><div class="step-line"></div><div class="step"><span>2</span><b>Compare</b></div><div class="step-line"></div><div class="step"><span>3</span><b>Review</b></div></div>
+        <input class="file-input" id="file-upload" type="file" multiple accept=".html,.json,.txt">
+        <label class="drop-zone" id="drop-zone" for="file-upload"><span class="upload-icon" aria-hidden="true">↑</span><strong>Choose your export files</strong><span>or drag them here</span><small>Required: <code>followers_1</code> + <code>following</code> &nbsp;•&nbsp; Optional: a previous <code>known-following</code> file</small></label>
+        <div class="selected-files" id="selected-files" hidden aria-live="polite"></div>
+        <div class="checker-actions"><button class="button button-primary" id="find-out-now" type="button">Compare files</button><button class="text-button" id="clear-files" type="button" hidden>Clear files</button></div>
+        <p class="checker-help">Not sure where to find these files? <a href="#how-it-works">Follow the three steps below.</a></p>
+      </div>
+      <section class="results" id="results" hidden aria-labelledby="results-title" aria-live="polite">
+        <div class="results-head"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="results-title"><span id="result-count">0</span> accounts don’t follow you back</h2></div><button class="button button-secondary" id="download-follower-info" type="button">Save this list</button></div>
+        <p class="result-explainer" id="result-explainer"></p><div class="empty-result" id="empty-result" hidden><span aria-hidden="true">✓</span><p>All caught up — everyone you follow follows you back.</p></div><ul class="result-list" id="result-list" aria-label="Accounts that do not follow you back"></ul>
+      </section>
+      <p class="status-message" id="status-message" role="status"></p>
+    </section>
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+    <section class="how-it-works" id="how-it-works" aria-labelledby="how-title">
+      <div class="section-heading"><p class="eyebrow">HOW IT WORKS</p><h2 id="how-title">Three simple steps</h2><p>Use your own Instagram download—no account connection needed.</p></div>
+      <div class="how-grid">
+        <article><span class="number">1</span><h3>Request your data</h3><p>In Instagram, go to <b>Settings → Accounts Center → Your information and permissions → Download your information</b>.</p></article>
+        <article><span class="number">2</span><h3>Choose followers</h3><p>Select <b>Followers and following</b>, set the date range to <b>All time</b>, then download the export as HTML or JSON.</p></article>
+        <article><span class="number">3</span><h3>Upload and compare</h3><p>Unzip the download and add <b>followers_1</b> and <b>following</b> above. We’ll compare them on your device.</p></article>
+      </div>
+      <details class="more-help"><summary>Which exact files do I need?</summary><p>Upload either <code>followers_1.html</code> with <code>following.html</code>, or <code>followers_1.json</code> with <code>following.json</code>. You can also add a previous <code>known-following-YYYY-MM-DD.txt</code> file to show only newly identified accounts.</p></details>
+    </section>
 
-				<!-- Intro -->
-					<section class="intro">
-						<header>
-							<h1>Unifolllow</h1>
-							<p>The Only Free Way to Check Your Unfollow/Follow On Instagram</p>
-							<ul class="actions">
-								<li><a href="#fields" class="arrow scrolly"><span class="label">Next</span></a></li>
-							</ul>
-						</header>
-						<div class="content">
-							<span class="image fill" data-position="center"><img src="images/followers3.png" alt="" /></span>
-						</div>
-					</section>
+    <section class="resources" aria-labelledby="resources-title">
+      <div class="section-heading"><p class="eyebrow">MORE FROM UNIFOLLOW</p><h2 id="resources-title">Guides, stories, and support</h2><p>Explore the original resources that help you use Instagram with more clarity and control.</p></div>
+      <div class="resource-grid">
+        <a class="resource-card featured" href="blog.html"><span class="resource-tag">GUIDES</span><h3>Instagram guides</h3><p>Practical articles on unfollowers, growth, privacy, wellness, and the Instagram algorithm.</p><span class="card-link">Browse all guides →</span></a>
+        <a class="resource-card" href="blog/insights.html"><span class="resource-tag">START HERE</span><h3>How to find unfollowers</h3><p>Understand the comparison and why a local export is the safer route.</p><span class="card-link">Read guide →</span></a>
+        <a class="resource-card" href="blog/tips.html"><span class="resource-tag">GROWTH</span><h3>Five follower-growth tips</h3><p>Simple, sustainable ways to build an engaged audience.</p><span class="card-link">Read guide →</span></a>
+        <a class="resource-card" href="user-stories.html"><span class="resource-tag">COMMUNITY</span><h3>Stories from users</h3><p>Read the experiences shared by the Unifolllow community.</p><span class="card-link">Explore stories →</span></a>
+        <a class="resource-card" href="share-your-story.html"><span class="resource-tag">COMMUNITY</span><h3>Share your story</h3><p>Tell us about your experience and help shape future resources.</p><span class="card-link">Share your story →</span></a>
+        <a class="resource-card" href="contact.html"><span class="resource-tag">SUPPORT</span><h3>Need a hand?</h3><p>Find troubleshooting guidance or contact the team for help.</p><span class="card-link">Get support →</span></a>
+      </div>
+      <div class="resource-links"><a href="about.html">About us</a><a href="support-us.html">Support Unifolllow</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div>
+    </section>
 
-				<section id="why-we-built-this">
-					<header>
-						<h2>Why We Built This</h2>
-					</header>
-					<div class="content">
-						<p>Instagram doesn't make it easy to see who's unfollowed you — but that doesn't mean you're out of luck. We built Unifolllow to bring back transparency in a world that hides it. Tired of clunky apps requiring logins, subscriptions, or shady tracking, we wanted a simple and secure way to help people stay in control of their online presence.</p>
-						<p>Unifolllow is completely free, no logins, no data storage. Just you and your files — analyzed instantly, privately, and locally. It's a tool made by creators who were just as frustrated as you. We hope it helps.</p>
-					</div>
-					</section>
+    <section class="privacy-callout" aria-labelledby="privacy-title"><span class="privacy-icon" aria-hidden="true">⌁</span><div><p class="eyebrow">YOUR PRIVACY</p><h2 id="privacy-title">Your export files never leave this page.</h2><p>The comparison happens locally in your browser. We don’t ask for an Instagram login or store your export files.</p></div><a class="text-link" href="privacy.html">Read privacy policy <span aria-hidden="true">→</span></a></section>
+  </main>
 
-				<!-- Section -->
-					<section id="first">
-						<header>
-							<h2>About</h2>
-						</header>
-						<div class="content">
-							<p>Unfortunately, Instagram doesn’t reveal who unfollowed you, leaving users frustrated as they scroll through their following list and click on profiles just to check.</p> <p>Enter <strong>Unifolllow</strong>.</p> <p>Leveraging Instagram's data, Unifolllow shows you who unfollowed you—completely free, with no ads, no tracking, and no data taken!</p>
-						</div>
-					</section>
-
-				<!-- Section -->
-					<section>
-						<header>
-							<h2>Benefits</h2>
-						</header>
-						<div class="content">
-							<ul class="feature-icons">
-								<li class="icon solid fa-laptop">Safe</li>
-								<li class="icon solid fa-bolt">Free</li>
-								<li class="icon solid fa-signal">Simple</li>
-								<li class="icon solid fa-cog">Accurate</li>
-						</div>
-					</section>
-
-				<!-- Section -->
-					<section>
-						<header>
-							<h2>How it works</h2>
-						</header>
-						<div class = "content">
-						<!-- Tab Switcher -->	
-						<div class="tab-container">
-							<div class="tab-note">
-								<!-- <p>Switch between video and written instructions by clicking the buttons below.</p> -->
-							</div>
-							<div class="tab-buttons">
-								<button class="tablinks active" onclick="openTab(event, 'Video')">Video</button>
-								<button class="tablinks" onclick="openTab(event, 'Steps')">Step by Step</button>
-							</div>
-							
-
-							<div class="tab-content-container">
-								
-								<!-- Video Instructions -->
-								<div id="Video" class="tabcontent active">
-									<div class="content">
-										<div class="gallery">
-											<p><strong>Video Instructions</strong></p>
-											<ol>
-												<li>Go on your Instagram page and download your data.</li>
-												<div class ="iframe-container">
-													<iframe width="560" height="315" src="https://www.youtube.com/embed/b1OMlwQFSzs?si=ou5VG87ar6bjOwqO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-												</div>
-												<li>Unzip the file you downloaded and add it into Unifolllow.</li>
-												<div class ="iframe-container">
-													<iframe width="560" height="315" src="https://www.youtube.com/embed/o6Hk04hRmo0?si=3tIcCbIS6R8cyTFQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-												</div>
-												<li>Bonus: In the future, see an updated list of unfollowed users by clicking/downloading the "<b>Download Follower Information</b>" button to filter out those you've already seen.</li>
-												<div class ="iframe-container">
-													<iframe width="560" height="315" src="https://www.youtube.com/embed/oM5e1yoguR4?si=Ii4LYJwqfXJ2vyub" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-												</div>	
-
-												
-											</ol>
-										</div>
-									</div>
-								</div>
-								
-								<!-- Word Instructions -->
-								<div id="Steps" class="tabcontent">
-									<div class="content">
-										<div class="gallery">
-											<p><strong>Step by Step Instructions</strong></p>
-											<ol>
-												<li>Go on the Instagram page of your profile and click on "Settings".</li>
-												<a href="images/Step1.png" class="landscape"><img src="images/Step1.png" alt="" /></a>
-												<li>Click on “See more in Accounts Center”.</li>
-												<a href="images/Step2.png" class="landscape"><img src="images/Step2.png" alt="" /></a>
-												<li>
-												  Then, Follow these steps:
-												  <ol style="margin-left: 20px;">
-												    <li>Click on <b>"Your information and permissions"</b></li>
-												    <li>Select <b>"Download your information"</b></li>
-												    <li>Click <b>"Download or transfer information"</b></li>
-												    <li>Choose <b>"Some of your information"</b></li>
-												    <li>Scroll down and find <b>"Followers and the following"</b></li>
-												  </ol>
-												</li>
-												<a href="images/Step3.png" class="landscape"><img src="images/Step3.png" alt="" /></a>
-												<li>Click on <b>"Download to device"</b> -> <b>"Create files"</b> and be sure that the date range is set to <b>“All time”</b> instead of its default range <b>“last year”</b>. Either HTML or JSON is fine!</li>
-												<a href="images/Step4.png" class="landscape"><img src="images/Step4.png" alt="" /></a>
-												<li>Once your data is downloaded, unzip the file and add <strong>"followers_1.html"</strong> and <strong>"following.html"</strong> into Unifolllow.</li>
-												<ul>
-													<li>You can also use <strong>"followers_1.json"</strong> and <strong>"following.json".</strong></li>
-												</ul>
-												<a href="images/Step6.png" class="landscape"><img src="images/Step6.png" alt="" /></a>
-												<a href="images/Step5.png" class="landscape"><img src="images/Step5.png" alt="" /></a>
-												<li>Click on <b>“Find Out Now”</b> and see who has unfollowed you!</li>
-												<a href="images/Step7.png" class="landscape"><img src="images/Step7.png" alt="" /></a>
-												<li>Bonus: Click the <strong>"Download Follower Information"</strong> button to save your followers list as <strong>"known-following.txt"</strong>. Next time, upload it with <strong>"followers_1.html"</strong> and <strong>"following.html"</strong> to only see new unfollowers.</li>
-												
-											</ol>
-										</div>
-									</div>
-								</div>
-
-							</div>
-						</div>
-						</div>
-					</section>
-		
-				<!-- Section -->
-					<section id="fields">
-						<header>
-							<h2>Try it out!</h2>
-						</header>
-						<div class="content">
-							<div class="fields">
-								<div class="field half">
-									<input type="file" name="file-upload" id="file-upload" multiple>
-								</div>
-								<div class="field half">
-									<ul class="actions">
-										<li><a href="#" class="button primary large" id="find-out-now">Find Out Now</a></li>
-									</ul>
-								</div>
-							</div>
-							<form>
-								<div class="fields">
-									<div class="field">
-										<label for="output-textarea">Please select exactly two files:</label>
-											<ul>
-												<li>'followers_1.html' and 'following.html'</li>
-												<li>'followers_1.json' and 'following.json'</li>
-											</ul>
-										<textarea name="" id="output-textarea" rows="7"></textarea>
-									</div>
-								</div>
-								<div class="field half">
-									<ul class="actions" style="flex-direction: column; align-items: flex-start;">
-									  <li>
-										<button type="button" class="button primary large" id="download-follower-info" disabled>
-										  Download Follower Information
-										</button>
-									  </li>
-									  <li style="margin-top: 10px;">
-										<a href="https://www.buymeacoffee.com/Unifolllow" target="_blank" rel="noopener">
-										  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 45px; width: 162px;">
-										</a>
-									  </li>
-									</ul>
-								  </div>
-								  
-							</form>
-						</div>
-					</section>
-
-				<!-- Section -->
-					<section>
-						<header>
-							<h2>Get in touch</h2>
-						</header>
-						<div class="content">
-							<p>Thank you so much for the support! Let us know how we can improve. Left side are our contact information for inquiries or send us any message :)</p>
-						</div>
-						<footer>
-							<ul class="items">
-								<li>
-									<h3>Email</h3>
-									<a href="mailto:innovate.jl@gmail.com">innovate.jl@gmail.com</a>
-								</li> 
-								<li>
-									<h3>Elsewhere</h3>
-									<ul class="icons">
-										<li><a href="https://www.youtube.com/channel/UCkMCyFU3lBO-EvFDZFdOimA" class="icon brands fa-youtube"><span class="label">YouTube</span></a></li>
-										<li><a href="https://www.instagram.com/unifolllow/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-										<li><a href="https://www.reddit.com/r/Unifolllow/" class="icon brands fa-reddit"><span class="label">Reddit</span></a></li>
-									</ul>
-								</li>
-								<li>
-									<a href="terms.html">Terms and Conditions</a> 
-								</li>
-								<li>
-									<a href="privacy.html">Privacy Policy</a> 
-								</li>
-								<li>
-									<h3>Support Us</h3>
-									<a href="https://www.buymeacoffee.com/Unifolllow" target="_blank" rel="noopener">Buy Me a Coffee</a>
-								</li>
-							</ul>
-						</footer>
-					</section>
-
-				<!-- Copyright -->
-				<div class="copyright">&copy; Unifolllow. All rights reserved. Design: HTML5 UP</div> 
-
-			</div>
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script src="assets/js/download.follower.info.js"></script>
-			<script type="module" src="assets/js/findout.now.handler.js"></script>
-			<script src="assets/js/tab-switcher.js"></script>
-	</body>
+  <footer class="site-footer"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">u</span><span>Unifolllow</span></a><p>A private, browser-based Instagram export checker.</p><nav aria-label="Footer navigation"><a href="blog.html">Guides</a><a href="user-stories.html">Stories</a><a href="about.html">About</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a><a href="support-us.html">Support</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></nav></footer>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
 </html>

@@ -34,23 +34,29 @@ function getNavbarPath() {
 
 // Load the navbar
 fetch(getNavbarPath())
-    .then(response => response.text())
+    .then(response => {
+        if (!response.ok) throw new Error(`Unable to load navigation (${response.status})`);
+        return response.text();
+    })
     .then(data => {
-        document.getElementById('navbar-placeholder').innerHTML = data;
+        const placeholder = document.getElementById('navbar-placeholder');
+        if (placeholder) placeholder.innerHTML = data;
     })
     .catch(error => console.error('Error loading the navbar:', error));
 
 
-function toggleMenu() {
-    document.querySelector('.nav-links').classList.toggle('active');
+function toggleMenu(button) {
+    const links = document.querySelector('.nav-links');
+    if (!links) return;
+    const isOpen = links.classList.toggle('active');
+    button.setAttribute('aria-expanded', String(isOpen));
 }
 
 function toggleDropdown(event) {
-    // Prevent link from redirecting
     event.preventDefault();
-
-    // Toggle dropdown visibility
-    const dropdownContent = event.target.nextElementSibling;
-    dropdownContent.classList.toggle('active');
+    const button = event.currentTarget;
+    const dropdownContent = button.nextElementSibling;
+    const isOpen = dropdownContent.classList.toggle('active');
+    button.setAttribute('aria-expanded', String(isOpen));
 }
     

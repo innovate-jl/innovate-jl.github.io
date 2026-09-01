@@ -1,44 +1,43 @@
-<!-- 
-Copyright (c) @2024 JNL Enterprises. All rights reserved.
-
-This software is the confidential and proprietary information of
-JNL Enterprises ("Confidential Information"). You shall not
-disclose such Confidential Information and shall use it only in
-accordance with the terms of the license agreement you entered into
-with JNL Enterprises.
--->
-<div class="navbar">
-    <div class="logo">
-        <a href="/">Unifolllow</a>
+<nav class="navbar" aria-label="Main navigation">
+  <div class="logo"><a href="/" aria-label="Unifolllow home"><span>u</span>Unifolllow</a></div>
+  <button class="menu-icon" type="button" aria-label="Open navigation" aria-expanded="false" onclick="toggleMenu(this)">☰</button>
+  <div class="nav-links">
+    <a href="/#checker">Check my export</a>
+    <a href="/#how-it-works">How it works</a>
+    <div class="dropdown">
+      <button type="button" aria-expanded="false" onclick="toggleDropdown(event)">Guides <span aria-hidden="true">⌄</span></button>
+      <div class="dropdown-content">
+        <a href="/blog.html">All guides</a>
+        <a href="/blog/insights.html">Finding unfollowers</a>
+        <a href="/blog/tips.html">Growing followers</a>
+        <a href="/blog/breaking-the-code.html">Instagram algorithm</a>
+        <a href="/blog/digital-detox.html">Digital detox</a>
+        <a href="/blog/it-stings.html">Why unfollows sting</a>
+        <a href="/blog/silent-breakup.html">The silent breakup</a>
+        <a href="/blog/dilemma.html">Why we care</a>
+        <a href="/blog/crisis.html">Data privacy</a>
+        <a href="/blog/power.html">Instant gratification</a>
+        <a href="/blog/why-now.html">Why transparency matters</a>
+        <a href="/blog/wtf.html">Social media dynamics</a>
+      </div>
     </div>
-
-    <!-- Hamburger Icon for Mobile -->
-    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-    
-    <div class="nav-links">
-        <a href="/about.html">About Us</a>
-        <a href="/contact.html">Contact & Support</a>
-        <a href="/share-your-story.html">Share your Story!</a>
-        <a href="/user-stories.html">Stories from Users</a>
-        <!-- Dropdown Menu -->
-        <div class="dropdown">
-            <a href="javascript:void(0)" onclick="toggleDropdown(event)">Blog<i class="fa fa-caret-down"></i></a>
-            <div class="dropdown-content">
-                <a href="/blog/crisis.html">Crisis...</a>
-                <a href="/blog/dilemma.html">Dilemma on Instagram</a>
-                <a href="/blog/digital-detox.html">Digital Detox</a>
-                <a href="/blog/breaking-the-code.html">Breaking the Algorithm</a>
-                <a href="/blog/wtf.html">Why?</a>
-                <a href="/blog/why-now.html">The Right Time?</a>
-                <a href="/blog/it-stings.html">It Stings</a>
-                <a href="/blog/silent-breakup.html">Silent Breakup</a>
-                <a href="/blog/insights.html">Insights</a>
-                <a href="/blog/power.html">Power</a>
-                <a href="/blog/tips.html">Tips for IG</a>
-            </div>
-        </div>
-        <a href="/terms.html">Terms and Conditions</a>
-        <a href="/faq.html">FAQ</a>
-        <a href="/privacy.html">Privacy Policy</a>
+    <div class="dropdown">
+      <button type="button" aria-expanded="false" onclick="toggleDropdown(event)">Community <span aria-hidden="true">⌄</span></button>
+      <div class="dropdown-content">
+        <a href="/about.html">About us</a>
+        <a href="/contact.html">Contact &amp; support</a>
+        <a href="/share-your-story.html">Share your story</a>
+        <a href="/user-stories.html">User stories</a>
+        <a href="/support-us.html">Support us</a>
+      </div>
     </div>
-</div>
+    <a href="/faq.html">FAQ</a>
+    <div class="dropdown">
+      <button type="button" aria-expanded="false" onclick="toggleDropdown(event)">Site <span aria-hidden="true">⌄</span></button>
+      <div class="dropdown-content">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</nav>

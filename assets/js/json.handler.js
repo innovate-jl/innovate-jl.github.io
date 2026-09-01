@@ -12,6 +12,7 @@ export function computeDifferenceFromJSON(files) {
     const downloadButton = document.getElementById('download-follower-info');
 
     return new Promise((resolve, reject) => {
+        console.log("Hit the JSON handler");
         const filesArray = Array.from(files);
 
         let followersInput, followingInput;
@@ -27,50 +28,42 @@ export function computeDifferenceFromJSON(files) {
             return;
         }
 
+        console.log("Passed verification, starting to read files");
         const readFile = (file) => new Promise((res) => {
             const reader = new FileReader();
             reader.onload = e => res(JSON.parse(e.target.result));
             reader.readAsText(file);
         });
 
-        Promise.all([readFile(followersInput), readFile(followingInput)])
-            .then(([followersContent, followingContent]) => {
-                const extractedFollowers = extractFollowersUsernames(followersContent);
-                const extractedFollowing = extractFollowingUsernames(followingContent);
+        Promise.all([readFile(followersInput), readFile(followingInput)]).then(([followersContent, followingContent]) => {
+            const extractedFollowers = extractUsernamesFromJSON(followersContent);
+            const extractedFollowing = extractUsernamesFromJSON(followingContent, true); // Assuming 'true' is necessary for distinguishing the data type
 
-                const followersSet = new Set(extractedFollowers);
-                const followingSet = new Set(extractedFollowing);
+            const difference = extractedFollowing.filter(username => !extractedFollowers.includes(username));
+            difference.sort();
 
-                const difference = [...followingSet].filter(user => !followersSet.has(user));
-                difference.sort();
-
-                resolve(difference);
-            })
-            .catch(err => reject(err));
+            resolve(difference);
+        }).catch(err => reject(err));
     });
 }
 
-// For followers_1.json
-function extractFollowersUsernames(data) {
-    //console.log("Followers Data: ", data);
-    const usernames = new Set();
-    data.forEach(item => {
-        if (item.string_list_data) {
-            item.string_list_data.forEach(userDetail => {
-                if (userDetail.value) usernames.add(userDetail.value);
-            });
-        }
-    });
-    return Array.from(usernames);
-}
-
-// For following.json
-function extractFollowingUsernames(data) {
-    const usernames = new Set();
-    if (data.relationships_following) {
+function extractUsernamesFromJSON(data, isFollowing = false) {
+    const usernames = [];
+    // The parsing logic might vary based on whether it's followers or following data
+    if (isFollowing) {
+        // Extract usernames from the following JSON structure
         data.relationships_following.forEach(item => {
-            usernames.add(item.title);
+            item.string_list_data.forEach(userDetail => {
+                usernames.push(userDetail.value); // Assuming 'value' holds the username
+            });
+        });
+    } else {
+        // Extract usernames from the followers JSON structure
+        data.forEach(item => {
+            item.string_list_data.forEach(userDetail => {
+                usernames.push(userDetail.value); // Assuming 'value' holds the username
+            });
         });
     }
-    return Array.from(usernames);
+    return usernames; // Return the extracted list of usernames
 }
