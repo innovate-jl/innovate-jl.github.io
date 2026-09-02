@@ -48,8 +48,19 @@ function requireFiles() {
 function usernamesFromHtml(markup) {
   const documentCopy = new DOMParser().parseFromString(markup, 'text/html');
   return [...documentCopy.querySelectorAll('a[href*="instagram.com/"]')]
-    .map(link => { try { return new URL(link.href).pathname.split('/').filter(Boolean)[0]; } catch { return null; } })
+    .map(link => usernameFromInstagramUrl(link.href))
     .filter(Boolean);
+}
+function usernameFromInstagramUrl(href) {
+  try {
+    const url = new URL(href);
+    const segments = url.pathname.split('/').filter(Boolean);
+    const legacyProfileMarker = segments.findIndex(segment => segment.toLowerCase() === '_u');
+    const username = legacyProfileMarker >= 0 ? segments[legacyProfileMarker + 1] : segments[0];
+    return username ? decodeURIComponent(username).replace(/^@/, '') : null;
+  } catch {
+    return null;
+  }
 }
 function usernamesFromJson(data, following) {
   const source = following ? data.relationships_following : data;

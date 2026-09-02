@@ -7,6 +7,42 @@
  * accordance with the terms of the license agreement you entered into
  * with JNL Enterprises.
  */
+// Shared site integrations. Keeping these in the common navigation loader means
+// every public page uses the same Analytics and AdSense account configuration.
+const ADSENSE_CLIENT = 'ca-pub-2540056840638247';
+const ANALYTICS_ID = 'G-BK5N7HVC46';
+
+function addAsyncScript(src, options = {}) {
+    if ([...document.scripts].some(script => script.src === src)) return;
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = src;
+    if (options.crossOrigin) script.crossOrigin = options.crossOrigin;
+    document.head.appendChild(script);
+}
+
+function loadSiteIntegrations() {
+    if (!document.querySelector('meta[name="google-adsense-account"]')) {
+        const accountMeta = document.createElement('meta');
+        accountMeta.name = 'google-adsense-account';
+        accountMeta.content = ADSENSE_CLIENT;
+        document.head.appendChild(accountMeta);
+    }
+
+    addAsyncScript(`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`, { crossOrigin: 'anonymous' });
+    addAsyncScript(`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_ID}`);
+
+    if (!window.__unifolllowAnalyticsConfigured) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function() { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', ANALYTICS_ID);
+        window.__unifolllowAnalyticsConfigured = true;
+    }
+}
+
+loadSiteIntegrations();
+
 // Load the navbar
 // Determine the correct path to navbar.html based on the current location
 // Function to determine the correct path to navbar.html
