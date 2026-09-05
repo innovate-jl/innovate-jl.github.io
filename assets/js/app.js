@@ -40,10 +40,13 @@ function requireFiles() {
   const json = selected.filter(file => /\.json$/i.test(file.name));
   const find = (files, name) => files.find(file => file.name.toLowerCase() === name);
   const htmlPair = [find(html, 'followers_1.html'), find(html, 'following.html')];
-  const jsonPair = [find(json, 'followers_1.json'), find(json, 'following.json')];
+  const followerJsonFiles = json.filter(file => /^followers(?:_\d+)?\.json$/i.test(file.name));
+  const followingJsonFile = find(json, 'following.json');
   if (htmlPair.every(Boolean) && json.length === 0) return { type: 'html', files: htmlPair };
-  if (jsonPair.every(Boolean) && html.length === 0) return { type: 'json', files: jsonPair };
-  throw new Error('Select either followers_1.html and following.html, or followers_1.json and following.json. You may also add one previous known-following file.');
+  if (followerJsonFiles.length > 0 && followingJsonFile && followerJsonFiles.length + 1 === json.length && html.length === 0) {
+    return { type: 'json', followerFiles: followerJsonFiles, followingFile: followingJsonFile };
+  }
+  throw new Error('Select followers_1.json (and any additional followers_#.json files) plus following.json, or the matching HTML files. You may also add one previous known-following file.');
 }
 function usernamesFromHtml(markup) {
   const documentCopy = new DOMParser().parseFromString(markup, 'text/html');
@@ -62,10 +65,26 @@ function usernameFromInstagramUrl(href) {
     return null;
   }
 }
-function usernamesFromJson(data, following) {
-  const source = following ? data.relationships_following : data;
-  if (!Array.isArray(source)) throw new Error('That JSON export does not have the expected Instagram format.');
-  return source.flatMap(item => (item.string_list_data || []).map(detail => detail.value)).filter(Boolean);
+function usernamesFromJson(data, file, following) {
+  const source = following ? data?.relationships_following : data;
+  const expected = following ? 'a relationships_following list' : 'a top-level list';
+  if (!Array.isArray(source)) throw new Error(`“${file.name}” does not have the expected Instagram structure: ${expected}.`);
+
+  const usernames = source.flatMap(item => (Array.isArray(item?.string_list_data) ? item.string_list_data : [])
+    .map(detail => typeof detail?.value === 'string' ? detail.value.trim().replace(/^@/, '') : '')
+    .filter(Boolean));
+  if (source.length > 0 && usernames.length === 0) {
+    throw new Error(`“${file.name}” does not contain usernames in string_list_data.value, which this Instagram export format requires.`);
+  }
+  return usernames;
+}
+async function readJsonFile(file) {
+  const raw = await file.text();
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`“${file.name}” is not valid JSON. Please choose the original JSON file from your Instagram download.`);
+  }
 }
 async function compareFiles() {
   statusMessage.textContent = '';
@@ -73,9 +92,20 @@ async function compareFiles() {
     const source = requireFiles();
     compareButton.disabled = true;
     compareButton.textContent = 'Comparing…';
-    const [followersRaw, followingRaw] = await Promise.all(source.files.map(file => file.text()));
-    const followers = source.type === 'html' ? usernamesFromHtml(followersRaw) : usernamesFromJson(JSON.parse(followersRaw), false);
-    const following = source.type === 'html' ? usernamesFromHtml(followingRaw) : usernamesFromJson(JSON.parse(followingRaw), true);
+    let followers;
+    let following;
+    if (source.type === 'html') {
+      const [followersRaw, followingRaw] = await Promise.all(source.files.map(file => file.text()));
+      followers = usernamesFromHtml(followersRaw);
+      following = usernamesFromHtml(followingRaw);
+    } else {
+      const [followerData, followingData] = await Promise.all([
+        Promise.all(source.followerFiles.map(readJsonFile)),
+        readJsonFile(source.followingFile)
+      ]);
+      followers = followerData.flatMap((data, index) => usernamesFromJson(data, source.followerFiles[index], false));
+      following = usernamesFromJson(followingData, source.followingFile, true);
+    }
     const followerSet = new Set(followers);
     let difference = [...new Set(following.filter(name => !followerSet.has(name)))].sort((a, b) => a.localeCompare(b));
     if (historyFile) {
