@@ -65,7 +65,10 @@ function usernameFromInstagramUrl(href) {
 function usernamesFromJson(data, following) {
   const source = following ? data.relationships_following : data;
   if (!Array.isArray(source)) throw new Error('That JSON export does not have the expected Instagram format.');
-  return source.flatMap(item => (item.string_list_data || []).map(detail => detail.value)).filter(Boolean);
+  return source.flatMap(item => (item.string_list_data || []).map(detail => {
+    const value = typeof detail.value === 'string' ? detail.value.trim() : '';
+    return value || usernameFromInstagramUrl(detail.href);
+  })).filter(Boolean);
 }
 async function compareFiles() {
   statusMessage.textContent = '';
